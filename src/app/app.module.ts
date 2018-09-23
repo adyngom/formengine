@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
