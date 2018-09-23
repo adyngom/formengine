@@ -1,22 +1,25 @@
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { FormBuilderObject } from './models.d';
+import { ProjectValidators } from "./validators/ValidatorFields";
 
 export class FormengineClass {
   private formBuilder: FormBuilder = new FormBuilder();
   public formInstance: any;
-  public formConfigObject: FormBuilderObject;
-  public formGroup: FormGroup;
+  public formGroup: FormGroup = {};
   public form: any;
 
   constructor(config: FormBuilderObject) {
-    this.formConfigObject = config;
-
-    this.form = this.formBuilder.group({
-      'firstName': [''],
-      'lastName': ['']
-    });
-
     Object.assign(this, config);
-    console.log(config);
+
+    // assign validators group
+    if (this.validators.length < 2) {
+      if (!!ProjectValidators[this.validators[0].toLowerCase()]) {
+        this.formGroup = ProjectValidators[this.validators[0].toLowerCase()];
+      }
+    }
+
+    this.form = this.formBuilder.group(this.formGroup);
+
+    console.log(this);
   }
 }

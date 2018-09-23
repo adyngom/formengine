@@ -14,12 +14,21 @@ export class AppComponent {
   constructor() {
     this.appForm = new FormengineClass({
       fields: [''],
-      validators: [''],
+      validators: ['Signup'],
       onSave: (...data) => console.log(data),
       onLoad: (...data) => console.log(data),
       onNew: (...data) => console.log(data)
     }).form;
 
     console.log(this.appForm);
+  }
+
+  // helper function for easy reference in html template
+  get f() {
+    return this.appForm.controls;
+  }
+
+  onSubmit() {
+    console.log(this.appForm.value);
   }
 }
