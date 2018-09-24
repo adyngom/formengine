@@ -5,8 +5,19 @@ import { ProjectValidators } from "./validators/ValidatorFields";
 export class FormengineClass {
   private formBuilder: FormBuilder = new FormBuilder();
   public formInstance: any;
-  public formGroup: FormGroup = {};
+  public initFormGroup: FormGroup;
+  public formGroup: FormGroup;
   public form: any;
+  public fields: Array<string>;
+  public validators: Array<string>;
+
+  // onLoad use case:
+  // public objectFromDB: Object = {
+  //   firstName: 'Ady',
+  //   lastName: 'Ngom',
+  //   email: 'angom@gmailll.com'
+  // };
+
 
   constructor(config: FormBuilderObject) {
     Object.assign(this, config);
@@ -20,6 +31,14 @@ export class FormengineClass {
 
     this.form = this.formBuilder.group(this.formGroup);
 
-    console.log(this);
+    // onLoad use case
+    // if (!!this.objectFromDB) {
+    //   for(let key in this.objectFromDB) {
+    //     this.form.patchValue({
+    //       [key]: this.objectFromDB[key]
+    //     })
+    //   }
+    // }
+
   }
 }
