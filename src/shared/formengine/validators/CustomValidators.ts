@@ -15,7 +15,7 @@ import { AbstractControl, AbstractControlOptions} from "@angular/forms";
  * when creating specific error messages
  */
 export const PasswordValidator = ( minlength = 6 ) => {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
+  return (control: AbstractControl): { [key: string]: boolean | string } | null => {
     if ( !!control.value ) {
       const _control = control.value;
 
@@ -31,9 +31,9 @@ export const PasswordValidator = ( minlength = 6 ) => {
 
       // does it contain at least one number
       if (!(_control.match(/[0-9]/g))) {
-        return { 'no-digit': true };
+        return { 'no-digit': 'XXXX' };
       }
-
+      
     }
     return null;
   };
