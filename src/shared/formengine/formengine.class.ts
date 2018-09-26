@@ -1,8 +1,8 @@
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { FormBuilderObject } from './models.d';
 import { ProjectValidators } from "./validators/ValidatorFields";
 
-export class FormengineClass {
+export class FormEngine {
   private formBuilder: FormBuilder = new FormBuilder();
   public formInstance: any;
   public initFormGroup: FormGroup;
@@ -10,6 +10,7 @@ export class FormengineClass {
   public form: any;
   public fields: Array<string>;
   public validators: Array<string>;
+  public config: FormBuilderObject;
 
   // onLoad use case:
   // public objectFromDB: Object = {
@@ -20,8 +21,9 @@ export class FormengineClass {
 
 
   constructor(config: FormBuilderObject) {
-    Object.assign(this, config);
-
+    //Object.assign(this, config);
+    this.config = config;
+    new FormControl()
     // assign validators group
     if (this.validators.length < 2) {
       if (!!ProjectValidators[this.validators[0].toLowerCase()]) {

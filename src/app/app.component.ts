@@ -1,7 +1,57 @@
 import { Component } from '@angular/core';
-import { FormGroup } from "@angular/forms";
+import { FormGroup, ValidatorFn, AsyncValidatorFn } from "@angular/forms";
 import { FormengineClass } from "../shared/formengine/formengine.class";
 import { ProjectValidators } from '../shared/formengine/validators/ValidatorFields';
+import { Observable } from 'rxjs';
+
+export interface FormDomainService<TPrimaryKey, TModel> {
+  /**
+   * Flat model that stores field values
+   */
+  model: TModel;
+  /**
+   * Primary key for the model or null (if it is "new" form)
+   */
+  modelId: TPrimaryKey | null;
+  /**
+   *
+   */
+  saveModel(): Observable<TModel>;
+  loadModel(): Observable<TModel>;
+  newModel(): TModel;
+  cancelModel();
+  syncValidators: { [fieldName: string]: ValidatorFn | ValidatorFn[] };
+  asyncValidators?: { [fieldName: string]: AsyncValidatorFn | AsyncValidatorFn[] };
+}
+
+export interface FormEngineConfiguration<TPrimaryKey, TModel> {
+  fields: Array<string>;
+  service: FormDomainService<TPrimaryKey, TModel>
+}
+
+export interface FormInstance<TPrimaryKey, TModel> {
+  form: FormGroup;
+
+  isNewForm(): boolean;
+
+  isFormValid(): boolean;
+  isFormDirty(): boolean;
+  isFormTouched(): boolean;
+
+  isFieldValid(fieldName: string): boolean;
+  isFieldDirty(fieldName: string): boolean;
+  isFieldTouched(fieldName: string): boolean;
+
+  reset();
+  reload(): Observable<any>;
+
+  save(): Observable<any>;
+  cancel();
+}
+
+export interface FormEngineBuilder<TPrimaryKey, TModel> {
+  build(config: FormEngineConfiguration<TPrimaryKey, TModel>): FormInstance<TPrimaryKey, TModel>;
+}
 
 @Component({
   selector: 'hlx-root',
@@ -10,30 +60,26 @@ import { ProjectValidators } from '../shared/formengine/validators/ValidatorFiel
 })
 export class AppComponent extends AppComponentBase {
   title = 'fengpoc';
-  public appForm: FormGroup;
+  public appForm: FormEngineInstance<string, ProjectDto>;
 
-  constructor() {
-    this.appForm = new FormengineClass({
-      fields: ['firstName', 'lastName', ['address', ['street', 'city']]],
-      validators: ProjectValidators,
-      onSave: (...data) => console.log(data),
-      onLoad: (...data) => console.log(data),
-      onNew: (...data) => console.log(data)
+  xxx : ProjectDto = {
+    firstName: 'igor',
+    lastName: 'asdhjgsadhshdgshsgdgdsgsfd',
+  }
+
+  constructor(private projectService: ProjectService) {
+    this.appForm.save().subscribe(_ => {
+      .....navigate away....
+    }, e => {
+      alert(e.toString());
     });
 
-
-    myFn() {
-      this.appForm.build() //; FormGroup
-    }
-    
   }
 
   // helper function for easy reference in html template
-  get f() {
-    return this.appForm.controls;
-  }
+  // get f() {
+  //  return this.appForm.controls;
+  //}
 
-  onSubmit() {
-    console.log(this.appForm.value);
-  }
+ 
 }

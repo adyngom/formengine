@@ -1,43 +1,43 @@
 import { Validators, ValidatorFn, AsyncValidator, AsyncValidatorFn} from "@angular/forms";
 
 import { PasswordValidator } from "./CustomValidators";
+import { Observable } from "rxjs";
 
-export const HLXFieldsRules = {
+export const HelixFieldsValidations = {
   required: Validators.required,
+  requiredWithMinLength: (size: number) => Validators.compose([Validators.required, Validators.minLength(size)]),
   minLength: ( size: number ) => Validators.minLength(size),
   maxLength: ( size: number ) => Validators.maxLength(size),
   passwordFormat: ( size: number) => PasswordValidator(size),
   emailFormat: Validators.email
 };
 
-firstName: {
-  validator: '',
-  error: '',
-}
+
+
+
 
 // TODO: this should be in its own file and should import the HLXFieldsRules object
 export const ProjectValidators = {
-  'firstName': Validators.compose([HLXFieldsRules.required, HLXFieldsRules.minLength(2)]),
+  'firstNameZ': HelixFieldsValidations.required,
+  'firstName': HelixFieldsValidations.requiredWithMinLength(2),
   'lastName': Validators.compose([HLXFieldsRules.required, HLXFieldsRules.minLength(2)]),
   'email': Validators.compose([HLXFieldsRules.required, HLXFieldsRules.emailFormat]),
-  'password': Validators.compose([HLXFieldsRules.required, HLXFieldsRules.passwordFormat(8)])
+  'myPassword': Validators.compose([HLXFieldsRules.required, HLXFieldsRules.passwordFormat(8)])
 }
 
-export const ProjectFormValidators = {
-  'signup': {
-    'firstName': ProjectValidators.firstName,
-    'lastName': ProjectValidators.lastName,
-    'email': ProjectValidators.email,
-    'password': ProjectValidators.password
-  },
-  'login': {
-    'email': ProjectValidators.email,
-    'password': ProjectValidators.password
-  },
-  'create-project': {
+// This shoud be in its own domain service
+export class ProjectService {
+  myValidators: ProjectValidators,
 
+  load(id: string): Observable<ProjectDto> {
+    ...
+  }
+
+  save(model: ProjectDto): Observable<ProjectDto> {
+    ...
   }
 }
+
 
 CreateProjectErrors = {
   'required': true,
@@ -54,17 +54,5 @@ export const ProjectErrorMessages = {
   'firstName': [ValidationErrorMessages.min, ValidationErrorMessages.required]
 }
 
-export const ProjectInitialValues = {
-  signup: {
-    'firstName': '',
-    'lastName': '',
-    'email': '',
-    'password': ''
-  },
-  login: {
-    'email': '',
-    'password': ''
-  }
-}
 
 
